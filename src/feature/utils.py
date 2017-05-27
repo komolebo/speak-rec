@@ -8,8 +8,10 @@ import numpy
 
 kwd_mark = object()
 
+
 def cached_func(function):
     cache = {}
+
     def wrapper(*args, **kwargs):
         key = args + (kwd_mark,) + tuple(sorted(kwargs.items()))
         if key in cache:
@@ -18,6 +20,7 @@ def cached_func(function):
             result = function(*args, **kwargs)
             cache[key] = result
             return result
+
     return wrapper
 
 

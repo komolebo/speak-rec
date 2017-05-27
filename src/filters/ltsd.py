@@ -7,6 +7,7 @@
 import sys
 from scipy.io import wavfile
 import matplotlib
+
 matplotlib.use("Qt4Agg")
 import matplotlib.pyplot as plt
 import numpy as np
@@ -15,6 +16,7 @@ from pyssp.vad.ltsd import LTSD
 
 
 MAGIC_NUMBER = 0.04644
+
 
 class LTSD_VAD(object):
     ltsd = None
@@ -35,7 +37,7 @@ class LTSD_VAD(object):
         self._init_window(fs)
         ltsd = LTSD(self.window_size, self.window, self.order)
         res, ltsds = ltsd.compute_with_noise(noise_signal,
-                noise_signal)
+                                             noise_signal)
         max_ltsd = max(ltsds)
         self.lambda0 = max_ltsd * 1.1
         self.lambda1 = self.lambda0 * 2.0
@@ -72,11 +74,11 @@ class LTSD_VAD(object):
         if fs is not None and fs != self.fs:
             self._init_window(fs)
         return LTSD(self.window_size, self.window, self.order,
-                lambda0=self.lambda0, lambda1=self.lambda1)
+                    lambda0=self.lambda0, lambda1=self.lambda1)
 
     def _mononize_signal(self, signal):
         if signal.ndim > 1:
-            signal = signal[:,0]
+            signal = signal[:, 0]
         return signal
 
 
@@ -89,6 +91,7 @@ def main():
     vaded_signal = ltsd.filter(signal)
 
     wavfile.write('vaded.wav', fs, vaded_signal)
+
 
 if __name__ == '__main__':
     main()

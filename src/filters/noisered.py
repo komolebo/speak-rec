@@ -16,11 +16,14 @@ NOISE_WAV = "/tmp/noise.wav"
 NOISE_MODEL = "/tmp/noise.prof"
 THRES = 0.21
 r = Random()
-class NoiseReduction(object):
 
-    def init_noise(self, fs, signal):
-        wavfile.write(NOISE_WAV, fs, signal)
-        os.system("sox {0} -n noiseprof {1}".format(NOISE_WAV, NOISE_MODEL))
+
+def init_noise(fs, signal):
+    wavfile.write(NOISE_WAV, fs, signal)
+    os.system("sox {0} -n noiseprof {1}".format(NOISE_WAV, NOISE_MODEL))
+
+
+class NoiseReduction(object):
 
     def filter(self, fs, signal):
         rand = r.randint(1, 100000)
@@ -41,7 +44,7 @@ class NoiseReduction(object):
 if __name__ == "__main__":
     fs, bg = wavfile.read(sys.argv[1])
     nr = NoiseReduction()
-    nr.init_noise(fs, bg)
+    init_noise(fs, bg)
 
     fs, sig = wavfile.read(sys.argv[2])
     vaded = nr.filter(fs, sig)

@@ -6,7 +6,6 @@
 from math import isnan
 
 import time
-# import scikits.talkbox as tb
 from scikits.talkbox.linpred import levinson_lpc
 from numpy import *
 from scipy.io import wavfile
@@ -43,7 +42,7 @@ class LPCExtractor(object):
         lpc = levinson_lpc.lpc(signal, self.n_lpc)[0]
         return lpc[1:]
         # lpcc = self.lpc_to_cc(lpc)
-        #return lpcc
+        # return lpcc
 
     def extract(self, signal):
         frames = (len(signal) - self.FRAME_LEN) / self.FRAME_SHIFT + 1

@@ -8,10 +8,11 @@ import sys
 import scipy.io.wavfile as wavfile
 import numpy as np
 
+
 def remove_silence(fs, signal,
-        frame_duration = 0.02,
-        frame_shift = 0.01,
-        perc = 0.15):
+                   frame_duration=0.02,
+                   frame_shift=0.01,
+                   perc=0.15):
     orig_dtype = type(signal[0])
     typeinfo = np.iinfo(orig_dtype)
     is_unsigned = typeinfo.min >= 0
@@ -20,13 +21,13 @@ def remove_silence(fs, signal,
         signal = signal - (typeinfo.max + 1) / 2
 
     siglen = len(signal)
-    retsig = np.zeros(siglen, dtype = np.int64)
+    retsig = np.zeros(siglen, dtype=np.int64)
     frame_length = int(frame_duration * fs)
     frame_shift_length = int(frame_shift * fs)
     new_siglen = 0
     i = 0
     # NOTE: signal ** 2 where signal is a numpy array
-    #       interpret an unsigned integer as signed integer,
+    # interpret an unsigned integer as signed integer,
     #       e.g, if dtype is uint8, then
     #           [128, 127, 129] ** 2 = [0, 1, 1]
     #       so the energy of the signal is somewhat
@@ -49,14 +50,17 @@ def remove_silence(fs, signal,
         retsig = retsig + typeinfo.max / 2
     return retsig.astype(orig_dtype)
 
+
 def task(fpath, new_fpath):
     fs, signal = wavfile.read(fpath)
     signal_out = remove_silence(fs, signal)
     wavfile.write(new_fpath, fs, signal_out)
     return fpath
 
+
 def main():
     task(sys.argv[1], sys.argv[2])
+
 
 if __name__ == '__main__':
     main()

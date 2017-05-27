@@ -15,10 +15,10 @@ def hamming(n):
     """ Generate a hamming window of n points as a numpy array.  """
     return 0.54 - 0.46 * cos(2 * pi / n * (arange(n) + 0.5))
 
-class MFCCExtractor(object):
 
+class MFCCExtractor(object):
     def __init__(self, fs, win_length_ms, win_shift_ms, FFT_SIZE, n_bands, n_coefs,
-                 PRE_EMPH, verbose = False):
+                 PRE_EMPH, verbose=False):
         self.PRE_EMPH = PRE_EMPH
         self.fs = fs
         self.n_bands = n_bands
@@ -29,7 +29,6 @@ class MFCCExtractor(object):
         self.FRAME_SHIFT = int(float(win_shift_ms) / 1000 * fs)
 
         self.window = hamming(self.FRAME_LEN)
-
 
         self.M, self.CF = self._mel_filterbank()
 
@@ -58,8 +57,8 @@ class MFCCExtractor(object):
         feature = []
         for f in xrange(frames):
             # Windowing
-            frame = signal[f * self.FRAME_SHIFT : f * self.FRAME_SHIFT +
-                           self.FRAME_LEN] * self.window
+            frame = signal[f * self.FRAME_SHIFT: f * self.FRAME_SHIFT +
+                                                 self.FRAME_LEN] * self.window
             # Pre-emphasis
             frame[1:] -= frame[:-1] * self.PRE_EMPH
             # Power spectrum
@@ -98,10 +97,10 @@ class MFCCExtractor(object):
         M = zeros((self.n_bands, 1 + fn2))
         for c in xrange(b2 - 1, b4):
             r = int(fp[c] - 1)
-            M[r, c+1] += 2 * (1 - pm[c])
+            M[r, c + 1] += 2 * (1 - pm[c])
         for c in xrange(b3):
             r = int(fp[c])
-            M[r, c+1] += 2 * pm[c]
+            M[r, c + 1] += 2 * pm[c]
         return M, CF
 
     @staticmethod
@@ -112,13 +111,15 @@ class MFCCExtractor(object):
         D[0] /= sqrt(2)
         return D
 
+
 @cached_func
 def get_mfcc_extractor(fs, win_length_ms=32, win_shift_ms=16,
                        FFT_SIZE=2048, n_filters=50, n_ceps=13,
                        pre_emphasis_coef=0.95):
     ret = MFCCExtractor(fs, win_length_ms, win_shift_ms, FFT_SIZE, n_filters,
-                       n_ceps, pre_emphasis_coef)
+                        n_ceps, pre_emphasis_coef)
     return ret
+
 
 def extract(fs, signal=None, diff=False, **kwargs):
     """accept two argument, or one as a tuple"""

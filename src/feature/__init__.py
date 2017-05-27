@@ -1,13 +1,11 @@
-
-
-
-#!/usr/bin/env python2
+# !/usr/bin/env python2
 # -*- coding: UTF-8 -*-
 # File: __init__.py
 # Date: Sat Nov 29 21:42:15 2014 +0800
 # Author: Yuxin Wu <ppwwyyxxc@gmail.com>
 
 import sys
+
 try:
     import BOB as MFCC
 except Exception as e:
@@ -17,10 +15,13 @@ except Exception as e:
 import LPC
 import numpy as np
 
+
 def get_extractor(extract_func, **kwargs):
     def f(tup):
         return extract_func(*tup, **kwargs)
+
     return f
+
 
 def mix_feature(tup):
     mfcc = MFCC.extract(tup)

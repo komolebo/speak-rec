@@ -9,6 +9,10 @@ import numpy as np
 from sklearn.mixture import GMM  # GaussianMixture as GMM
 
 
+def gmm_score(gmm, x):
+    return np.sum(gmm.score(x))
+
+
 class GMMSet(object):
     def __init__(self, gmm_order=32):
         self.gmms = []
@@ -21,9 +25,6 @@ class GMMSet(object):
         gmm.fit(x)
         self.gmms.append(gmm)
 
-    def gmm_score(self, gmm, x):
-        return np.sum(gmm.score(x))
-
     def before_pickle(self):
         pass
 
@@ -31,7 +32,7 @@ class GMMSet(object):
         pass
 
     def predict_one(self, x):
-        scores = [self.gmm_score(gmm, x) / len(x) for gmm in self.gmms]
+        scores = [gmm_score(gmm, x) / len(x) for gmm in self.gmms]
         p = sorted(enumerate(scores), key=operator.itemgetter(1), reverse=True)
         p = [(str(self.y[i]), y, p[0][1] - y) for i, y in p]
         result = [(self.y[index], value) for (index, value) in enumerate(scores)]

@@ -23,10 +23,10 @@ except:
     print >> sys.stderr, "Warning: failed to import fast-gmm, use gmm from scikit-learn instead"
     from skgmm import GMMSet, GMM
 
-CHECK_ACTIVE_INTERVAL = 1       # seconds
+CHECK_ACTIVE_INTERVAL = 1  # seconds
+
 
 class ModelInterface(object):
-
     UBM_MODEL_FILE = 'model/ubm.mixture-32.utt-300.model'
 
     def __init__(self):
@@ -44,7 +44,7 @@ class ModelInterface(object):
         """
         use VAD (voice activity detection) to filter out silence part of a signal
         """
-        ret, intervals = self.vad.filter(fs, signal)
+        ret, intervals = filter(fs, signal)
         orig_len = len(signal)
 
         if len(ret) > orig_len / 3:
@@ -64,6 +64,7 @@ class ModelInterface(object):
         if os.path.isfile(self.UBM_MODEL_FILE):
             try:
                 from gmmset import GMMSetPyGMM
+
                 if GMMSet is GMMSetPyGMM:
                     return GMMSet(ubm=GMM.load(self.UBM_MODEL_FILE))
             except Exception as e:
@@ -107,6 +108,7 @@ class ModelInterface(object):
             R = pickle.load(f)
             R.gmmset.after_pickle()
             return R
+
 
 if __name__ == "__main__":
     """ some testing"""

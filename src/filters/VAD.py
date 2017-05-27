@@ -1,13 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: UTF-8 -*-
-# File: VAD.py
-# Date: Tue Jun 10 15:17:26 2014 +0800
-# Author: Yuxin Wu <ppwwyyxxc@gmail.com>
 
-from silence import remove_silence
 from ltsd import LTSD_VAD
-
-import numpy as np
 
 
 class VAD(object):

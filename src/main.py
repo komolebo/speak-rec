@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 # -*- coding: UTF-8 -*-
-# File: speaker-recognition.py
+# File: main.py
 # Date: Sun Feb 22 22:36:46 2015 +0800
 # Author: Yuxin Wu <ppwwyyxxc@gmail.com>
 
@@ -25,10 +25,10 @@ Note that wildcard inputs should be *quoted*, and they will be sent to glob.glob
 
 Examples:
     Train (enroll a list of person named person*, and mary, with wav files under corresponding directories):
-    ./speaker-recognition.py -t enroll -i "./bob/ ./mary/ ./person*" -m model.out
+    ./main.py -t enroll -i "./bob/ ./mary/ ./person*" -m model.out
 
     Predict (predict the speaker of all wav files):
-    ./speaker-recognition.py -t predict -i "./*.wav" -m model.out
+    ./main.py -t predict -i "./*.wav" -m model.out
 """
     parser = argparse.ArgumentParser(description=desc, epilog=epilog,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)

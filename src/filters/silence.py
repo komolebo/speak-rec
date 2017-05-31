@@ -1,11 +1,14 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
+# silence.py - Для видалення ділянок без звуку голоса
 
 import sys
 import scipy.io.wavfile as wavfile
 import numpy as np
 
 
+# Алгоритм видалення порожніх ділянок, значення на яких менші 
+# за параметр perc
 def remove_silence(fs, signal,
                    frame_duration=0.02,
                    frame_shift=0.01,
@@ -23,15 +26,8 @@ def remove_silence(fs, signal,
     frame_shift_length = int(frame_shift * fs)
     new_siglen = 0
     i = 0
-    # NOTE: signal ** 2 where signal is a numpy array
-    # interpret an unsigned integer as signed integer,
-    #       e.g, if dtype is uint8, then
-    #           [128, 127, 129] ** 2 = [0, 1, 1]
-    #       so the energy of the signal is somewhat
-    #       right
     average_energy = np.sum(signal ** 2) / float(siglen)
     print average_energy
-    #print "Avg Energy: ", average_energy
     while i < siglen:
         subsig = signal[i:i + frame_length]
         ave_energy = np.sum(subsig ** 2) / float(len(subsig))
@@ -46,21 +42,3 @@ def remove_silence(fs, signal,
     if is_unsigned:
         retsig = retsig + typeinfo.max / 2
     return retsig.astype(orig_dtype)
-
-
-def task(fpath, new_fpath):
-    fs, signal = wavfile.read(fpath)
-    signal_out = remove_silence(fs, signal)
-    wavfile.write(new_fpath, fs, signal_out)
-    return fpath
-
-
-def main():
-    task(sys.argv[1], sys.argv[2])
-
-
-if __name__ == '__main__':
-    main()
-
-# vim: foldmethod=marker
-

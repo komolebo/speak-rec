@@ -1,5 +1,6 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
+# ltsd.py - файл містить функції для видалення шуму
 
 import sys
 from scipy.io import wavfile
@@ -15,6 +16,7 @@ from pyssp.vad.ltsd import LTSD
 MAGIC_NUMBER = 0.04644
 
 
+# Клас для очищення сигналу від шуму
 class LTSD_VAD(object):
     ltsd = None
     order = 5
@@ -28,6 +30,7 @@ class LTSD_VAD(object):
 
     noise_signal = None
 
+	# Для ініціалізації полей класу
     def init_params_by_noise(self, fs, noise_signal):
         noise_signal = self._mononize_signal(noise_signal)
         self.noise_signal = np.array(noise_signal)
@@ -42,12 +45,7 @@ class LTSD_VAD(object):
         print 'lambda0 =', self.lambda0
         print 'lambda1 =', self.lambda1
 
-    def plot_ltsd(self, fs, signal):
-        signal = self._mononize_signal(signal)
-        res, ltsds = self._get_ltsd().compute_with_noise(signal, self.noise_signal)
-        plt.plot(ltsds)
-        plt.show()
-
+	# Фільтруємо за допомогою бібліотечної функцію compute_with_noise
     def filter(self, signal):
         signal = self._mononize_signal(signal)
         res, ltsds = self._get_ltsd().compute_with_noise(signal, self.noise_signal)
@@ -62,35 +60,21 @@ class LTSD_VAD(object):
         except:
             return np.array([]), []
 
+	# Для кожного вікна застосовуємо функцію Хеммінга
     def _init_window(self, fs):
         self.fs = fs
         self.window_size = int(MAGIC_NUMBER * fs)
         self.window = np.hanning(self.window_size)
 
+	# Запуск конструктора класу
     def _get_ltsd(self, fs=None):
         if fs is not None and fs != self.fs:
             self._init_window(fs)
         return LTSD(self.window_size, self.window, self.order,
                     lambda0=self.lambda0, lambda1=self.lambda1)
 
+	# Працюємо лише із моно-сигналами 
     def _mononize_signal(self, signal):
         if signal.ndim > 1:
             signal = signal[:, 0]
         return signal
-
-
-def main():
-    fs, bg_signal = wavfile.read(sys.argv[1])
-    ltsd = LTSD_VAD()
-    ltsd.init_params_by_noise(fs, bg_signal)
-
-    fs, signal = wavfile.read(sys.argv[2])
-    vaded_signal = ltsd.filter(signal)
-
-    wavfile.write('vaded.wav', fs, vaded_signal)
-
-
-if __name__ == '__main__':
-    main()
-
-# vim: foldmethod=marker

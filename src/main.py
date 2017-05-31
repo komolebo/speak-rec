@@ -1,8 +1,6 @@
 #!/usr/bin/env python2
 # -*- coding: UTF-8 -*-
-# File: main.py
-# Date: Sun Feb 22 22:36:46 2015 +0800
-# Author: Yuxin Wu <ppwwyyxxc@gmail.com>
+# main.py - точка входу у програму
 
 import argparse
 import sys
@@ -17,6 +15,7 @@ from gui.interface import ModelInterface
 from gui.utils import read_wav
 
 
+# Інтерфейсна частина для парсингу вхідних параметрів
 def get_args():
     desc = "Speaker Recognition Command Line Tool"
     epilog = """
@@ -49,6 +48,7 @@ Examples:
     return ret
 
 
+# Інтерфейсна частина запуску процесу навчання програмних засобів
 def task_enroll(input_dirs, output_model):
     m = ModelInterface()
     input_dirs = [os.path.expanduser(k) for k in input_dirs.strip().split()]
@@ -73,6 +73,7 @@ def task_enroll(input_dirs, output_model):
     m.dump(output_model)
 
 
+# Інтерфейсна частина запуску процесу розпізнавання вхідних сигналів
 def task_predict(input_files, input_model):
     m = ModelInterface.load(input_model)
     for f in glob.glob(os.path.expanduser(input_files)):

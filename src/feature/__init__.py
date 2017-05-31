@@ -1,8 +1,7 @@
 # !/usr/bin/env python2
 # -*- coding: UTF-8 -*-
-# File: __init__.py
-# Date: Sat Nov 29 21:42:15 2014 +0800
-# Author: Yuxin Wu <ppwwyyxxc@gmail.com>
+# __init__.py - для імпорту і запуску бібліотек MFCC, LPC
+
 
 import sys
 
@@ -16,13 +15,7 @@ import LPC
 import numpy as np
 
 
-def get_extractor(extract_func, **kwargs):
-    def f(tup):
-        return extract_func(*tup, **kwargs)
-
-    return f
-
-
+# Функція взаємодії алгоритмів MFCC та LPC
 def mix_feature(tup):
     mfcc = MFCC.extract(tup)
     lpc = LPC.extract(tup)

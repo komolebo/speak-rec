@@ -1,5 +1,6 @@
 #!/usr/bin/env python2
 # -*- coding: UTF-8 -*-
+# Файл обгортки метода MFCC
 
 from utils import cached_func, diff_feature
 import bob
@@ -7,6 +8,7 @@ import bob.ap
 import numpy
 
 
+# Виклик методу MFCC через бібліотеку BOB
 @cached_func
 def get_bob_extractor(fs, win_length_ms=32, win_shift_ms=16,
                       n_filters=55, n_ceps=19, f_min=0., f_max=6000,
@@ -17,6 +19,7 @@ def get_bob_extractor(fs, win_length_ms=32, win_shift_ms=16,
     return ret
 
 
+# Функція-обгортка навколо get_bob_extractor
 def extract(fs, signal=None, diff=False, **kwargs):
     """accept two argument, or one as a tuple"""
     if signal is None:

@@ -1,9 +1,11 @@
 #!/usr/bin/env python2
 # -*- coding: UTF-8 -*-
+# utils.py - Файл із допоміжними функціями введення-виведення
 
 from scipy.io import wavfile
 
 
+# Для зчитування сигнала
 def read_wav(fname):
     fs, signal = wavfile.read(fname)
     if len(signal.shape) == 1:
@@ -13,25 +15,20 @@ def read_wav(fname):
         return fs, mono
     assert 1 == 2, "Wild error"
 
-    # assert len(signal.shape) == 1, "Only Support Mono Wav File!"
-    # return fs, signal
 
-
+# Для запису сигнала
 def write_wav(fname, fs, signal):
     wavfile.write(fname, fs, signal)
 
-
+# Для виведення часу
 def time_str(seconds):
     minutes = int(seconds / 60)
     sec = int(seconds % 60)
     return "{:02d}:{:02d}".format(minutes, sec)
 
 
+# Стерео у моно
 def monophonic(signal):
     if signal.ndim > 1:
         signal = signal[:, 0]
     return signal
-
-
-if __name__ == "__main__":
-    print time_str(100.0)
